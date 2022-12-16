@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\User;
@@ -27,7 +28,6 @@ class AuthController extends Controller
         if(!$user || $user->email_verified_at == null) {
             return redirect('/')->with('error', 'Sorry your account is not yet verified or does not exist');
         }
-
         $login = auth()->attempt([
             'email'     =>  $request->email,
             'password'  =>  $request->password
@@ -36,7 +36,6 @@ class AuthController extends Controller
         if(!$login){
             return back()->with('error', 'Password is incorrect');
         }
-
         return redirect('/dashboard');
     }
     public function registerForm() {
@@ -49,20 +48,22 @@ class AuthController extends Controller
     public function register(Request $request) {
         $request->validate([
             'name'          =>          'required|string',
+            'gender'        =>          'required|string',
             'email'         =>          'required|email|unique:users',
             'password'      =>          'required|confirmed|string:|min:6'
         ]);
 
 
-        $token = Str::random(60);
+        $token = Str::random(24);
 
         $user = User::create([
             'name'                  =>      $request->name,
             'email'                 =>      $request->email,
+            'gender'                =>      $request->gender,
             'password'              =>      bcrypt($request->password),
             'remember_token'        =>      $token
         ]);
-        Mail::send('auth.verification', ['user' => $user], function($mail) use($user){
+        Mail::send('auth.verification-email', ['user' => $user], function($mail) use($user){
             $mail->to($user->email);
             $mail->subject('Account verification');
         });
@@ -71,7 +72,7 @@ class AuthController extends Controller
     }
 
     public function verification(User $user, $token){
-        if($user->remember_token!==$token){
+        if($user->remember_token !== $token){
             return redirect('/')->with('error', 'Invalid token. The attached token is invalid or has already been consumed.');
         }
 
@@ -85,4 +86,3 @@ class AuthController extends Controller
         return redirect('/')->with('message', 'Log out successfully');
     }
 }
-

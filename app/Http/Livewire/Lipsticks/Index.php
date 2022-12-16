@@ -22,7 +22,7 @@ class Index extends Component
             $query->where('shades', $this->shades);
         }
 
-        $lipsticks= $query->paginate(6);
+        $lipsticks= $query->paginate(4);
 
         return compact('lipsticks');
     }

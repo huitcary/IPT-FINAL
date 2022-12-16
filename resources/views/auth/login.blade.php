@@ -4,7 +4,7 @@
 
 @section('title', 'Log in')
 <body>
-    <div class="container col-md-4 offset-md-4 mt-5">
+    <div class="login-box container col-md-4 offset-md-4" >
         @if (session('message'))
         <div class="alert alert-success">{{ session('message') }}</div>
         @endif
@@ -12,8 +12,8 @@
         <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
 
-        <div class="card shadow mb-5 rounded border border-light">
-            <div class="card-header bg-info">
+        <div class="card shadow mb-5 rounded  ">
+            <div class="card-header header">
                 <h3 class="text-center mt-2">LOG IN</h3>
             </div>
             <div class="card-body">
@@ -43,9 +43,11 @@
                         <div class="flex-grow-1">
                             <a href="{{ '/register' }}">Sign up for an account</a>
                         </div>
-                        <button class="btn btn-primary px-5" type="submit">Login</button>
+                        <button class="btn btn-dark px-5" type="submit">Login</button>
                     </div>
                     </form>
+
+                    
             </div>
         </div>
     </div>
@@ -54,17 +56,33 @@
 @endsection
 
 <style>
+    .d-flex .flex-grow-1 a{
+        color: #ec4e20;
+    }
+    .d-flex button{
+        color: #ec4e20;
+    }
+     .card .card-header{
+        background: black;
+        color: #ec4e20;
+    }
+.fa{
+    color: #ec4e20;
+}
 #basic-addon1 {
     width: 40px;
     text-align: center;
     background-color: black;
 }
 body{
-    background-image: url("images/cover.jpg");
+    background-image: url("images/mirror.png");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     height: 100%;
+}
+.login-box{
+    margin-top: 10%;
 }
 </style>
 
